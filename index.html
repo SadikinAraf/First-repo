@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .container {
+            display: flex;
+            justify-content: center;
+        }
+        
+        .bl {
+            background-color: blue;
+        }
+        
+        .re {
+            background-color: red;
+        }
+        
+        .gr {
+            background-color: green;
+        }
+        
+        .ye {
+            background-color: yellow;
+        }
+        
+        .btn {
+            padding: 11px 26px;
+            font-size: 22px;
+        }
+        
+        #myCanvas {
+            border: 2px solid grey;
+            position: fixed;
+            z-index: -10;
+            top: 78px;
+        }
+        
+        #colorChoice {
+            padding: inherit;
+            width: 85px;
+            height: 56px;
+        }
+        
+        .row-1 {
+            display: flex;
+            justify-content: center;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="row-1">
+        <input type="color" name="" id="colorChoice">
+
+        <button class="btn " onclick="plus()">+</button>
+        <button class="btn" onclick="minus()">-</button>
+        <button class="btn" onclick="change()">Clear All</button>
+    </div>
+    <div class="canvas-all">
+        <canvas id="myCanvas"></canvas>
+    </div>
+
+
+    <script>
+        var col = [];
+        col[0] = "black";
+        document.querySelector("#colorChoice").addEventListener('change', (e) => {
+
+            var color = e.target.value;
+            col[0] = color.toString()
+            console.log(col[0])
+        })
+
+        var canvas = document.querySelector("#myCanvas");
+        var ctx = canvas.getContext("2d");
+        var paint = false;
+        canvas.width = 900
+        canvas.height = 520
+        var wid = 5;
+        //var color = "black";
+        var pen = true;
+
+        function change() {
+            ctx.clearRect(0, 0, 900, 600);
+        }
+
+        function plus() {
+            wid += 1;
+        }
+
+        function minus() {
+            wid -= 1;
+        }
+
+        function start() {
+            paint = true
+        }
+
+        function stop() {
+            paint = false
+            ctx.beginPath()
+        }
+
+        function draw(val) {
+            // ctx.clearRect(0, 0, 600, 600);
+            if (paint == true) {
+                //   ctx.beginPath()
+                // ctx, fillStyle = "black"
+                //ctx.arc(val.clientX, val.clientY, 10, 0, 2 * Math.PI)
+                //ctx.fill()
+
+                if (pen == true) {
+                    ctx.lineWidth = wid;
+                    ctx.lineCap = "round"
+                    ctx.strokeStyle = col[0]
+                    ctx.lineTo(val.clientX - 10, val.clientY - 78);
+                    ctx.stroke()
+                    ctx.closePath()
+                    ctx.beginPath()
+                    ctx.moveTo(val.clientX - 10, val.clientY - 78)
+                } else if (pen == false) {
+                    ctx.lineCap = "round"
+                    ctx.clearRect(val.clientX - 5, val.clientY - 5, 20, 20);
+
+                }
+
+            }
+
+        }
+        canvas.addEventListener("mousedown", start)
+        canvas.addEventListener("mouseup", stop)
+        canvas.addEventListener("mousemove", draw)
+
+        //   canvas.addEventListener("toucdown", start)
+        // canvas.addEventListener("touchup", stop)
+        // canvas.addEventListener("touch", draw)
+    </script>
+</body>
+
+</html>
